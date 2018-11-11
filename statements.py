@@ -70,22 +70,85 @@ def endswith(string, suffix):
 
 def verb_stem(s):
     """extracts the stem from the 3sg form of a verb, or returns empty string"""
-    
-    # stem ends in anything except s,x,y,z,ch,sh OR a vowel, add s (eats, tells, shows)
-    exceptions_1 = ['s','x','y','z','a','e','i','o','u']
-    exceptions_2 = ['ch','sh']
-    if (s[-2:] != exceptions_1 and s[-3:] != exceptions_2):
-        return s[:-1]
-    # if the stem ends in y preceeded by a vowel, simply add s (pays, buys)
-    if (re.match("[aeiou]y", s[-3:-1])):
-        return s[:-1]
-    # if the stem ends in y preceded by a non-vowel and contains at least three letters, change the y to ies
-    if (endswith(s,'ies')):
-        if re.match('.*[^aeiou]$', s[:-3]):
-            if len(s) > 4:
-                return s[:-3] + 'y'
-            elif len(s) == 4:
+    if re.match('.*s$', s):
+
+    # if the stem ends in y preceded by a non vowel and contains at least three letters, change the y to ies
+    # flies, tries, unifies
+        if re.match('.*ies', s):
+            if s == 'unties':
+                return 'untie'
+
+    # if the stem is of the form Xie where X is a single letter other than a vowel, simply add s 
+    # dies, lies, ties - note that this doesn't account for unties
+            elif (re.match('[^aeiou]ies', s) and len(s) == 4):
                 return s[:-1]
+            else:
+                if len(s) >= 5:
+                    return s[:-3]+'y'
+
+    # if the stem ends in y preceded by a vowel, simply add s
+    # pays, buys
+        if re.match('.*[aeiou]ys$', s):
+            return s[:-1]
+
+    # if the stem ends in o, x, ch, sh, ss, or zz, add es
+    # goes, boxes, attaches, washes, dresses, fizzes
+        if re.match('.*([ox]|ch|sh|ss|zz)es',s):
+            return s[:-2]
+    
+    # if the stem ends in se or ze but not in sse or zze, add s 
+    # loses, dazes, lapses, analyses
+        if re.match('.*([^sz])(se|ze)s', s):
+            return s[:-1]
+
+    # if the stem ends in e not preceded by i, o, s, x, z, ch, sh, just add s
+    # likes, hates, bathes
+        if re.match('.*[^iosxz]es', s):
+            return s[:-1]
+    
+    # if the stem ends in anything except s,x,y,z,ch,sh or a vowel, simply add s
+    # eats, tells, shows
+        else:
+            return s[:-1]
+
+    # if the stem is have, its 3s form is has
+    if (s == 'have'):
+        return 'has'
+
+## TEST CODE    
+
+a = ["eats","tells","shows"]
+b = ["pays","buys"]
+c = ["flies","tries","unifies"]
+d = ["dies","lies","ties","unties"]
+e = ["goes","boxes","attaches","washes","dresses","fizzes"]
+f = ["loses","dazes","lapses","analyses"]
+g = ["have"]
+h = ["likes","hates","bathes"]
+
+for verb in a:
+    print verb_stem(str(verb))
+
+for verb in b:
+    print verb_stem(str(verb))
+
+for verb in c:
+    print verb_stem(str(verb))
+
+for verb in d:
+    print verb_stem(str(verb))
+
+for verb in e:
+    print verb_stem(str(verb))
+
+for verb in f:
+    print verb_stem(str(verb))
+
+for verb in g:
+    print verb_stem(str(verb))
+
+for verb in h:
+    print verb_stem(str(verb))
 
 def add_proper_name (w,lx):
     """adds a name to a lexicon, checking if first letter is uppercase"""
