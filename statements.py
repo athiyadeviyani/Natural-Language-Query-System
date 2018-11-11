@@ -108,12 +108,18 @@ def verb_stem(s):
     
     # if the stem ends in anything except s,x,y,z,ch,sh or a vowel, simply add s
     # eats, tells, shows
-        else:
+        if re.match('.*[^sxyzaeiou]s', s):
             return s[:-1]
+        
+        else:
+            return ""
 
     # if the stem is have, its 3s form is has
     if (s == 'have'):
         return 'has'
+
+    else:
+        return ""
 
 ## TEST CODE    
 
@@ -149,6 +155,8 @@ for verb in g:
 
 for verb in h:
     print verb_stem(str(verb))
+
+print verb_stem("flys")
 
 def add_proper_name (w,lx):
     """adds a name to a lexicon, checking if first letter is uppercase"""
