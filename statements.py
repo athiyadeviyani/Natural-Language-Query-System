@@ -121,42 +121,42 @@ def verb_stem(s):
     else:
         return ""
 
-## TEST CODE    
+######## TEST CODE    
 
-a = ["eats","tells","shows"]
-b = ["pays","buys"]
-c = ["flies","tries","unifies"]
-d = ["dies","lies","ties","unties"]
-e = ["goes","boxes","attaches","washes","dresses","fizzes"]
-f = ["loses","dazes","lapses","analyses"]
-g = ["have"]
-h = ["likes","hates","bathes"]
+#a = ["eats","tells","shows"]
+#b = ["pays","buys"]
+#c = ["flies","tries","unifies"]
+#d = ["dies","lies","ties","unties"]
+#e = ["goes","boxes","attaches","washes","dresses","fizzes"]
+#f = ["loses","dazes","lapses","analyses"]
+#g = ["have"]
+#h = ["likes","hates","bathes"]
 
-for verb in a:
-    print verb_stem(str(verb))
+#for verb in a:
+#    print verb_stem(str(verb))
 
-for verb in b:
-    print verb_stem(str(verb))
+#for verb in b:
+#    print verb_stem(str(verb))
 
-for verb in c:
-    print verb_stem(str(verb))
+#for verb in c:
+#    print verb_stem(str(verb))
 
-for verb in d:
-    print verb_stem(str(verb))
+#for verb in d:
+#    print verb_stem(str(verb))
 
-for verb in e:
-    print verb_stem(str(verb))
+#for verb in e:
+#    print verb_stem(str(verb))
 
-for verb in f:
-    print verb_stem(str(verb))
+#for verb in f:
+#    print verb_stem(str(verb))
 
-for verb in g:
-    print verb_stem(str(verb))
+#for verb in g:
+#    print verb_stem(str(verb))
 
-for verb in h:
-    print verb_stem(str(verb))
+#for verb in h:
+#    print verb_stem(str(verb))
 
-print verb_stem("flys")
+#print verb_stem("flys")
 
 
 def add_proper_name (w,lx):
