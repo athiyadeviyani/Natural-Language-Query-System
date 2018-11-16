@@ -88,19 +88,58 @@ def top_level_rule(tr):
 def N_phrase_num(tr):
     """returns the number attribute of a noun-like tree, based on its head noun"""
     if (tr.label() == 'N'):
+        # N -> "Ns" | "Np"
         return tr[0][1]  # the s or p from Ns or Np
     elif (tr.label() == 'Nom'):
+        # Nom -> AN | AN Rel
         return N_phrase_num(tr[0])
-    elif  # add code here
+    elif (tr.label() == 'NP'): 
+        # NP -> P | AR Nom | Nom
+        if (tr[0].label == 'AR'):
+            return N_phrase_num(tr[1])
+        elif (tr[0].label == 'P'):
+            return N_phrase_num(tr[0])
+        elif (tr[0].label == 'Nom'):
+            return N_phrase_num(tr[0])
+    elif (tr.label() == 'AN'):
+        # AN -> N | A AN
+        if (tr[0].label() == 'N'):
+            return N_phrase_num(tr[0])
+        else:
+            return N_phrase_num(tr[1])
+    elif (tr.label() == 'P'):
+        return 's' # singular
+    else:
+        return ''
+
 
 def V_phrase_num(tr):
     """returns the number attribute of a verb-like tree, based on its head verb,
        or '' if this is undetermined."""
     if (tr.label() == 'T' or tr.label() == 'I'):
+        # I -> "Is" | "Ip"
+        # T -> "Ts" | "Tp"
         return tr[0][1]  # the s or p from Is,Ts or Ip,Tp
     elif (tr.label() == 'VP'):
+        # VP -> I | T NP | BE A | BE NP | VP AND VP 
         return V_phrase_num(tr[0])
-    elif  # add code here
+    elif (tr.label() == 'BE'):
+        # BE -> "BEs" | "BEp"
+        return tr[0][2]
+    elif (tr.label() == 'DO'):
+        # DO -> "DOs" | "DOp"
+        return tr[0][2]
+    elif (tr.label() == 'Rel'):
+        # Rel -> WHO VP | NP T
+        return V_phrase_num(tr[1])
+    elif (tr.label() == 'QP'):
+        # QP -> VP | DO NP T 
+        if (tr[0].label == 'VP'):
+            return V_phrase_num(tr[0])
+        else:
+            return ''
+    else: 
+        return ''
 
 def matches(n1,n2):
     return (n1==n2 or n1=='' or n2=='')
