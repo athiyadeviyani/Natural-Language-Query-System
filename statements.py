@@ -25,13 +25,15 @@ class Lexicon:
     def add(self, stem, cat):
         self.dictionary[stem].append(cat)
         
-    def getall(self, cat):
+    def getAll(self, cat):
         list = []
         for key in self.dictionary.keys():
-            if self.dictionary[key] == [cat]:
+            if cat in self.dictionary[key]:
                 list.append(key)
-        return list
         
+        return list
+
+   
 
 class FactBase:
     """stores unary and binary relational facts"""

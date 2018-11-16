@@ -69,7 +69,7 @@ def tag_word (lx,wd):
     for word, tag in function_words_tags:
         if word == wd:
             word_tags.append(tag)
-    
+
     for word in lx.getAll('P'):
         if word == wd:
             word_tags.append('P')
@@ -78,30 +78,51 @@ def tag_word (lx,wd):
         if word == wd:
             word_tags.append('A')
 
-    # For N, it is either a singular(Ns) or plural(Np) noun
     for word in lx.getAll('N'):
-        if word == wd:
-            word_tags.append('Ns')
-        if word == noun_stem(wd):
-            word_tags.append('Np')
+        if (word == wd) or (word == noun_stem(wd)):
+            if word in unchanging_plurals_list:
+                word_tags.append('Ns')
+                word_tags.append('Np')
+            elif (noun_stem(wd) == ''): # if the plural form does not exist
+                word_tags.append('Ns')
+            else:
+                word_tags.append('Np')
     
-    # For I, it is either singular(Is) or plural(Ip)
     for word in lx.getAll('I'):
-        if word == wd:
-            word_tags.append('Is')
-        if word == verb_stem(wd):
-            word_tags.append('Ip')
-    
-    # For T, it is either singular(Ts) or plural(Tp)
+        if (word == wd) or (word == verb_stem(wd)):
+            if (verb_stem(wd) == ''):
+                word_tags.append('Is')
+            else:
+                word_tags.append('Ip')
+
     for word in lx.getAll('T'):
-        if word == wd:
-            word_tags.append('Ts')
-        if word == verb_stem(wd):
-            word_tags.append('Tp')
+        if (word == wd) or (word == verb_stem(wd)):
+            if (verb_stem(wd) == ''):
+                word_tags.append('Ts')
+            else:
+                word_tags.append('Tp')
+        
     
     return word_tags
     
 
+#lx1 = Lexicon()
+#lx1.add('John', 'P')
+#lx1.add('orange', 'N')
+#lx1.add('orange', 'A')
+#lx1.add('fish', 'N')
+#lx1.add('fish', 'I')
+#lx1.add('fish', 'T')
+#lx1.add('like', 'T')
+#lx1.add('duck', 'N')
+#lx1.add('fly', 'T') 
+#print(tag_word(lx1, 'John'))
+#print(tag_word(lx1, 'a'))
+#print(tag_word(lx1, 'orange'))
+#print(tag_word(lx1, 'fishes'))
+#print(tag_word(lx1, 'like'))
+#print(tag_word(lx1, 'duck'))
+#print(tag_word(lx1, 'fly'))
 
 def tag_words (lx, wds):
     """returns a list of all possible taggings for a list of words"""
