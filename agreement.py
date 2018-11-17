@@ -151,7 +151,27 @@ def check_node(tr):
         return (matches (N_phrase_num(tr[1]), V_phrase_num(tr[2])))
     elif (rule == 'NP -> AR Nom'):
         return (N_phrase_num(tr[1]) == 's')
-    elif  # add code here
+    elif (rule == 'NP -> Nom'):
+        return (N_phrase_num(tr[0]) == 'p')
+    elif (rule == 'VP -> BE NP'):
+        return (matches (V_phrase_num(tr[0]), N_phrase_num(tr[1])))
+    elif (rule == 'VP -> VP AND VP'):
+        return (matches (V_phrase_num(tr[0]), V_phrase_num(tr[2])))
+    elif (rule == 'VP -> T NP'):
+        return (matches (V_phrase_num(tr[0]), N_phrase_num(tr[1])))
+    elif (rule == 'QP -> DO NP T'):
+        bool = matches(V_phrase_num(tr[0]), N_phrase_num(tr[1]))
+        return bool and (V_phrase_num(tr[2]) == 'p')
+    elif (rule == 'Nom -> AN Rel'):
+        return (matches (N_phrase_num(tr[0]), V_phrase_num(tr[1])))
+    elif (rule == 'Rel -> NP T'):
+        return (matches (N_phrase_num(tr[0]), V_phrase_num(tr[1])))
+    elif (rule == 'Rel -> WHO VP'):
+        return (V_phrase_num(tr[1]) == 's')
+    elif (rule == 'AN -> A AN'):
+        return (N_phrase_num(tr[1]) == 's')
+    else:
+        return True
 
 def check_all_nodes(tr):
     """checks agreement constraints everywhere in tr"""
@@ -206,6 +226,7 @@ if __name__ == "__main__":
     tr0 = all_valid_parses(lx, ['Who','likes','John','?'])[0]
     tr = restore_words(tr0,['Who','likes','John','?'])
     tr.draw()
+ 
 
 # End of PART C.
 
