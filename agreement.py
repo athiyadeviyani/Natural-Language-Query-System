@@ -95,22 +95,20 @@ def N_phrase_num(tr):
         return N_phrase_num(tr[0])
     elif (tr.label() == 'NP'): 
         # NP -> P | AR Nom | Nom
-        if (tr[0].label == 'AR'):
-            return N_phrase_num(tr[1])
-        elif (tr[0].label == 'P'):
-            return N_phrase_num(tr[0])
+        if (tr[0].label == 'P'):
+            return 's'
         elif (tr[0].label == 'Nom'):
             return N_phrase_num(tr[0])
+        else:
+            return N_phrase_num(tr[1])
     elif (tr.label() == 'AN'):
         # AN -> N | A AN
         if (tr[0].label() == 'N'):
             return N_phrase_num(tr[0])
         else:
             return N_phrase_num(tr[1])
-    elif (tr.label() == 'P'):
-        return 's' # singular
     else:
-        return ''
+        return ""
 
 
 def V_phrase_num(tr):
@@ -157,8 +155,8 @@ def check_node(tr):
         return (matches (V_phrase_num(tr[0]), N_phrase_num(tr[1])))
     elif (rule == 'VP -> VP AND VP'):
         return (matches (V_phrase_num(tr[0]), V_phrase_num(tr[2])))
-    elif (rule == 'VP -> T NP'):
-        return (matches (V_phrase_num(tr[0]), N_phrase_num(tr[1])))
+   # elif (rule == 'VP -> T NP'):
+    #    return (matches (V_phrase_num(tr[0]), N_phrase_num(tr[1])))
     elif (rule == 'QP -> DO NP T'):
         bool = matches(V_phrase_num(tr[0]), N_phrase_num(tr[1]))
         return bool and (V_phrase_num(tr[2]) == 'p')
@@ -166,10 +164,10 @@ def check_node(tr):
         return (matches (N_phrase_num(tr[0]), V_phrase_num(tr[1])))
     elif (rule == 'Rel -> NP T'):
         return (matches (N_phrase_num(tr[0]), V_phrase_num(tr[1])))
-    elif (rule == 'Rel -> WHO VP'):
-        return (V_phrase_num(tr[1]) == 's')
-    elif (rule == 'AN -> A AN'):
-        return (N_phrase_num(tr[1]) == 's')
+  #  elif (rule == 'Rel -> WHO VP'):
+  #      return (V_phrase_num(tr[1]) == 's')
+  #  elif (rule == 'AN -> A AN'):
+  #      return (N_phrase_num(tr[1]) == 's')
     else:
         return True
 
@@ -220,13 +218,13 @@ def restore_words(tr,wds):
 
 if __name__ == "__main__":
     #code for a simple testing, feel free to modify
+ 
     lx = Lexicon()
     lx.add('John','P')
     lx.add('like','T')
     tr0 = all_valid_parses(lx, ['Who','likes','John','?'])[0]
     tr = restore_words(tr0,['Who','likes','John','?'])
     tr.draw()
- 
 
 # End of PART C.
 
