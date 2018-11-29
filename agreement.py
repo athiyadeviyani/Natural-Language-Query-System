@@ -95,18 +95,18 @@ def N_phrase_num(tr):
         return N_phrase_num(tr[0])
     elif (tr.label() == 'NP'): 
         # NP -> P | AR Nom | Nom
-        if (tr[0].label == 'P'):
-            return 's'
-        elif (tr[0].label == 'Nom'):
-            return N_phrase_num(tr[0])
-        else:
+        if (tr[0].label() == 'AR'):
             return N_phrase_num(tr[1])
+        else:
+            return N_phrase_num(tr[0])
     elif (tr.label() == 'AN'):
         # AN -> N | A AN
         if (tr[0].label() == 'N'):
             return N_phrase_num(tr[0])
         else:
             return N_phrase_num(tr[1])
+    elif (tr.label() == 'P'):
+        return 's'
     else:
         return ""
 

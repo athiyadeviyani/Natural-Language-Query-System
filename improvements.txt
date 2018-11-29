@@ -1,0 +1,41 @@
+Limitations of the system
+
+1. Ambiguity is very common in natural languages. This results in unsuccessful querying when more than two descriptors are attached to a noun.
+Example:
+If I add the following facts:
+$ Tia is a girl.
+$ Tia dances.
+$ Tia sings.
+And perform the following query:
+$ Who is a girl who dances and sings?
+The system will output 'Ambiguous' instead of 'Tia.
+This is because there can be more than one parse trees for the sentence 'Who is a girl who dances and sings?'. Ideally, in real life, the sentence is not ambiguous and if presented to a human listener, they would understand, after being presented the facts, that the girl who dances and sings is indeed, Tia. However, the system fails to understand this because 'and sings' could be applied to 'dances' OR 'dances and sings' can be attached to 'who'. 
+SOLUTION:
+A possible but a bit difficult way to solve this is to implement a probabilistic context-free grammar from more than one corpus. This will allow the system to work with sentences that produce multiple parse trees (sentences that are considered 'ambiguous' by the system) and use the tree which has the highest probability.
+
+2. System ONLY accepts proper nouns.
+Example:
+These following facts aren't acceptable:
+$ Tia likes shoes.
+$ Tia likes a boy.
+$ Tia likes kickboxing.
+But these are:
+$ John likes Tia.
+$ Mary likes Tia.
+SOLUTION:
+Verbs should not only accept proper nouns but also regular nouns (e.g. shoes), noun phrases (e.g. a boy), and verb/verb phrases (e.g. kickboxing). This is not too hard to implement as you only need to amend the process_statements() function in statements.py to accept the noun stems and verb stems from the input, and not only proper nouns, and store them in the fact base. 
+
+3. Limited question format.
+Example:
+One would expect after inputting the following facts:
+$ Tia is a girl.
+$ John is a boy.
+And getting successful queries from:
+$ Who is a girl?
+$ Who is a boy?
+That you can get the correct query results from the following questions:
+$ Who is not a boy?
+$ Is Tia a girl?
+But no. The grammar doesn't understand negations and other modifications to a question.
+SOLUTION:
+Modify the grammar by adding semantic rules that will successfully parse the different ways a question can be asked. This is not too hard to implement but it might be a bit tedious due to the number of possible question formats (more than one way to ask a question).

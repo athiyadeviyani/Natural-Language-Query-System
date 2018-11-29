@@ -23,15 +23,10 @@ class Lexicon:
         self.dictionary = defaultdict(list)
     
     def add(self, stem, cat):
-        self.dictionary[stem].append(cat)
+        add(self.dictionary[cat], stem)
         
     def getAll(self, cat):
-        list = []
-        for key in self.dictionary.keys():
-            if cat in self.dictionary[key]:
-                list.append(key)
-        
-        return list
+        return self.dictionary[cat]
 
    
 
@@ -43,24 +38,20 @@ class FactBase:
         self.binary = defaultdict(list)
     
     def addUnary(self, pred, e1):
-        self.unary[pred] = e1
+        add(self.unary[pred], e1)
+
+    def addBinary(self, pred, e1, e2):
+        add(self.binary[pred], (e1, e2))
         
     def queryUnary(self, pred, e1):
-        if pred in self.unary.keys():
-            if self.unary[pred] == e1:
-                return True
-            else:
-                return False
-    
-    def addBinary(self, pred, e1, e2):
-        self.binary[pred] = (e1, e2)
+        if (e1 in self.unary[pred]):
+            return True
+        return False
     
     def queryBinary(self, pred, e1, e2):
-        if pred in self.binary.keys():
-            if self.binary[pred] == (e1, e2):
-                return True
-            else:
-                return False
+        if ((e1, e2) in self.binary[pred]):
+            return True
+        return False
     
 
 import re
@@ -198,4 +189,3 @@ def process_statement (lx,wlist,fb):
     return msg
                         
 # End of PART A.
-

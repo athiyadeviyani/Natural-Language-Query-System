@@ -63,47 +63,56 @@ def noun_stem (s):
 def tag_word (lx,wd):
     """returns a list of all possible tags for wd relative to lx"""
     # add code here
-    word_tags = []
+
     # P A N(NP NS) I(IS IP) T(TS TP)
     # populate the word_tags list
-    for word, tag in function_words_tags:
-        if word == wd:
-            word_tags.append(tag)
-
-    for word in lx.getAll('P'):
-        if word == wd:
-            word_tags.append('P')
+    if wd in dict(function_words_tags).keys():
+        return [dict(function_words_tags)[wd]]
     
-    for word in lx.getAll('A'):
-        if word == wd:
-            word_tags.append('A')
+    word_stem = noun_stem(wd) or wd
+    plural = (noun_stem(wd) != '')
 
-    for word in lx.getAll('N'):
-        if (word == wd) or (word == noun_stem(wd)):
-            if word in unchanging_plurals_list:
-                word_tags.append('Ns')
-                word_tags.append('Np')
-            elif (noun_stem(wd) == ''): # if the plural form does not exist
-                word_tags.append('Ns')
-            else:
-                word_tags.append('Np')
+
+    raw_tags = []
+
+    if word_stem in lx.getAll('P'):
+        raw_tags.append('P')
     
-    for word in lx.getAll('I'):
-        if (word == wd) or (word == verb_stem(wd)):
-            if (verb_stem(wd) == ''):
-                word_tags.append('Is')
-            else:
-                word_tags.append('Ip')
+    if word_stem in lx.getAll('N'):
+        raw_tags.append('N')
 
-    for word in lx.getAll('T'):
-        if (word == wd) or (word == verb_stem(wd)):
-            if (verb_stem(wd) == ''):
-                word_tags.append('Ts')
-            else:
-                word_tags.append('Tp')
+    if word_stem in lx.getAll('A'):
+        raw_tags.append('A')
+
+    if word_stem in lx.getAll('I'):
+        raw_tags.append('I')
+
+    if word_stem in lx.getAll('T'):
+        raw_tags.append('T') 
+
+    tags = []
         
+    for tag in raw_tags:
+        if tag == 'N': 
+            if (wd in unchanging_plurals_list):
+                tags.append('Ns')
+            elif plural:
+                tags.append(tag + 'p')
+            else:
+                tags.append(tag + 's')
+        elif ((tag == 'I' or tag == 'P') and (wd in unchanging_plurals_list)):
+            tags.append(tag + 'p')
+        elif tag == 'I' or tag == 'T':
+            if plural:
+                tags.append(tag + 's')
+            else:
+                tags.append(tag + 'p')
+        else:
+            add(tags, tag)
+    return tags
+
+
     
-    return word_tags
     
 
 #lx1 = Lexicon()
@@ -116,6 +125,8 @@ def tag_word (lx,wd):
 #lx1.add('like', 'T')
 #lx1.add('duck', 'N')
 #lx1.add('fly', 'T') 
+
+#tag_word(lx1,'fish')
 #print(tag_word(lx1, 'John'))
 #print(tag_word(lx1, 'a'))
 #print(tag_word(lx1, 'orange'))
